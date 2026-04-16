@@ -1,782 +1,156 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>洛克广场 - 洛克王国：世界 Wiki攻略站</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #FF6B35;
-            --primary-light: #FF8F5E;
-            --primary-dark: #E5531F;
-            --secondary: #4A90D9;
-            --accent: #FFD23F;
-            --bg: #FFF8F0;
-            --bg-card: #FFFFFF;
-            --bg-section: #FFF3E8;
-            --text: #2D2D2D;
-            --text-light: #888888;
-            --text-muted: #AAAAAA;
-            --border: #F0E6DC;
-            --shadow: 0 2px 12px rgba(255, 107, 53, 0.08);
-            --shadow-hover: 0 8px 30px rgba(255, 107, 53, 0.15);
-            --radius: 16px;
-            --radius-sm: 12px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* ===== Hero Header ===== */
-        .hero {
-            background: linear-gradient(135deg, #FF6B35 0%, #FF8F5E 50%, #FFB347 100%);
-            padding: 0;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: heroGlow 8s ease-in-out infinite;
-        }
-        @keyframes heroGlow {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(5%, 5%); }
-        }
-
-        .hero-inner {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 48px 24px 40px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: #fff;
-            margin-bottom: 16px;
-            letter-spacing: 1px;
-        }
-
-        .hero h1 {
-            font-size: 36px;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .hero h1 span {
-            display: block;
-            font-size: 15px;
-            font-weight: 400;
-            opacity: 0.9;
-            margin-top: 8px;
-            letter-spacing: 2px;
-        }
-
-        /* ===== Floating Decorations ===== */
-        .float-star {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 50%;
-            animation: floatUp 6s ease-in-out infinite;
-        }
-        .float-star:nth-child(1) { left: 10%; top: 30%; animation-delay: 0s; width: 12px; height: 12px; }
-        .float-star:nth-child(2) { left: 80%; top: 20%; animation-delay: 2s; width: 18px; height: 18px; }
-        .float-star:nth-child(3) { left: 60%; top: 60%; animation-delay: 4s; width: 10px; height: 10px; }
-        .float-star:nth-child(4) { left: 25%; top: 70%; animation-delay: 1s; width: 14px; height: 14px; }
-        @keyframes floatUp {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-15px) scale(1.2); opacity: 0.6; }
-        }
-
-        /* ===== Nav Tabs ===== */
-        .nav-wrap {
-            background: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid var(--border);
-            box-shadow: 0 1px 8px rgba(0,0,0,0.04);
-        }
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 0 24px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .nav-inner::-webkit-scrollbar { display: none; }
-
-        .nav-tab {
-            padding: 14px 20px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-light);
-            cursor: pointer;
-            white-space: nowrap;
-            border-bottom: 3px solid transparent;
-            transition: all 0.25s;
-            user-select: none;
-        }
-        .nav-tab:hover { color: var(--primary); }
-        .nav-tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* ===== Search ===== */
-        .search-wrap {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px 24px 8px;
-        }
-        .search-box {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 0 18px;
-            transition: all 0.3s;
-            box-shadow: var(--shadow);
-        }
-        .search-box:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(255,107,53,0.1);
-        }
-        .search-box svg { flex-shrink: 0; color: var(--text-muted); }
-        .search-box input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 14px 12px;
-            font-size: 15px;
-            background: transparent;
-            color: var(--text);
-            font-family: inherit;
-        }
-        .search-box input::placeholder { color: var(--text-muted); }
-        .search-box .search-clear {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #eee;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            color: #999;
-            line-height: 20px;
-            text-align: center;
-        }
-        .search-box .search-clear.show { display: block; }
-
-        /* ===== Main Content ===== */
-        .main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 16px 24px 60px;
-        }
-
-        /* ===== Section ===== */
-        .section {
-            margin-bottom: 28px;
-            animation: fadeInUp 0.5s ease both;
-        }
-        .section:nth-child(1) { animation-delay: 0.1s; }
-        .section:nth-child(2) { animation-delay: 0.2s; }
-        .section:nth-child(3) { animation-delay: 0.3s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .section-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-        .section-icon.tujian { background: linear-gradient(135deg, #FFE0CC, #FFCBA4); }
-        .section-icon.tools { background: linear-gradient(135deg, #D0E8FF, #A8D4FF); }
-        .section-icon.wiki { background: linear-gradient(135deg, #E8D5F5, #D4B8EA); }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .section-title small {
-            font-size: 12px;
-            font-weight: 400;
-            color: var(--text-muted);
-            margin-left: 6px;
-        }
-
-        /* ===== Grid ===== */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 12px;
-        }
-        @media (min-width: 768px) {
-            .grid { grid-template-columns: repeat(6, 1fr); gap: 16px; }
-        }
-        @media (min-width: 1024px) {
-            .grid { grid-template-columns: repeat(8, 1fr); }
-        }
-
-        /* ===== Grid Item ===== */
-        .grid-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            padding: 18px 8px 14px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            user-select: none;
-        }
-        .grid-item:hover {
-            background: var(--bg-section);
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-        }
-        .grid-item:active {
-            transform: translateY(-1px) scale(0.97);
-        }
-
-        .item-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            position: relative;
-            transition: transform 0.3s;
-        }
-        .grid-item:hover .item-icon { transform: scale(1.1); }
-
-        /* Icon color themes */
-        .item-icon.orange { background: linear-gradient(135deg, #FFF0E5, #FFE0CC); }
-        .item-icon.blue   { background: linear-gradient(135deg, #E8F2FF, #D0E4FF); }
-        .item-icon.green  { background: linear-gradient(135deg, #E5F8ED, #C8F0D8); }
-        .item-icon.purple { background: linear-gradient(135deg, #F0E8F8, #E0D0F0); }
-        .item-icon.pink   { background: linear-gradient(135deg, #FFE8EE, #FFD0DD); }
-        .item-icon.yellow { background: linear-gradient(135deg, #FFF8E0, #FFF0C0); }
-        .item-icon.teal   { background: linear-gradient(135deg, #E0F5F0, #C0EBE0); }
-        .item-icon.red    { background: linear-gradient(135deg, #FFE5E5, #FFD0D0); }
-
-        .item-label {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text);
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        /* ===== Hot Badge ===== */
-        .badge-hot {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: linear-gradient(135deg, #FF4B4B, #FF6B6B);
-            color: #fff;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-weight: 700;
-        }
-        .badge-new {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: linear-gradient(135deg, #4CAF50, #66BB6A);
-            color: #fff;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-weight: 700;
-        }
-
-        /* ===== Quick Stats ===== */
-        .quick-stats {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 28px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
-        }
-        .quick-stats::-webkit-scrollbar { display: none; }
-
-        .stat-card {
-            flex: 1;
-            min-width: 140px;
-            background: #fff;
-            border-radius: var(--radius-sm);
-            padding: 18px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            text-align: center;
-            transition: all 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-        .stat-num {
-            font-size: 28px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-
-        /* ===== Modal ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-        .modal-overlay.show { display: flex; }
-
-        .modal {
-            background: #fff;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 520px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 32px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            animation: modalIn 0.35s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .modal-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        .modal-desc {
-            color: var(--text-light);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        .modal-close {
-            display: inline-block;
-            padding: 10px 28px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .modal-close:hover { background: var(--primary-dark); transform: scale(1.03); }
-
-        /* ===== Footer ===== */
-        .footer {
-            text-align: center;
-            padding: 32px 24px 48px;
-            color: var(--text-muted);
-            font-size: 12px;
-            line-height: 1.8;
-        }
-        .footer a { color: var(--primary); text-decoration: none; }
-        .footer a:hover { text-decoration: underline; }
-
-        /* ===== Responsive ===== */
-        @media (max-width: 480px) {
-            .hero h1 { font-size: 28px; }
-            .hero-inner { padding: 36px 20px 32px; }
-            .main { padding: 12px 16px 48px; }
-            .section-card { padding: 18px; }
-            .grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            .item-icon { width: 44px; height: 44px; font-size: 22px; border-radius: 14px; }
-            .quick-stats { gap: 8px; }
-            .stat-card { min-width: 110px; padding: 14px; }
-            .stat-num { font-size: 24px; }
-        }
-
-        /* ===== Scroll Reveal ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===== Dark mode support ===== */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg: #1A1A2E;
-                --bg-card: #22223A;
-                --bg-section: #2A2A45;
-                --text: #E8E8F0;
-                --text-light: #9999AA;
-                --text-muted: #666680;
-                --border: #333350;
-            }
-            .nav-wrap { background: #1E1E35; }
-            .search-box { background: #22223A; }
-            .stat-card { background: #22223A; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>洛克广场 - 洛克王国：世界 Wiki攻略站</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--p:#FF6B35;--pl:#FF8F5E;--pd:#E5531F;--bg:#FFF8F0;--card:#FFF;--sec:#FFF3E8;--t:#2D2D2D;--tl:#888;--tm:#AAA;--bd:#F0E6DC;--sh:0 2px 12px rgba(255,107,53,.08);--r:16px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--t);min-height:100vh}
+.hero{background:linear-gradient(135deg,#FF6B35,#FF8F5E,#FFB347);position:relative;overflow:hidden}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:44px 24px 36px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:5px 14px;border-radius:20px;font-size:13px;color:#fff;margin-bottom:12px}
+.hero h1{font-size:32px;font-weight:900;color:#fff}
+.hero h1 span{display:block;font-size:14px;font-weight:400;opacity:.9;margin-top:6px;letter-spacing:2px}
+.nav-wrap{background:#fff;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bd);box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;gap:4px;padding:0 24px;overflow-x:auto}
+.nav-tab{padding:13px 18px;font-size:14px;font-weight:500;color:var(--tl);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:.25s}
+.nav-tab:hover{color:var(--p)}.nav-tab.active{color:var(--p);border-bottom-color:var(--p);font-weight:700}
+.search-wrap{max-width:1200px;margin:0 auto;padding:20px 24px 8px}
+.search-box{display:flex;align-items:center;background:#fff;border:2px solid var(--bd);border-radius:14px;padding:0 16px;transition:.3s;box-shadow:var(--sh)}
+.search-box:focus-within{border-color:var(--p);box-shadow:0 0 0 4px rgba(255,107,53,.1)}
+.search-box input{flex:1;border:none;outline:none;padding:12px 10px;font-size:15px;background:transparent;font-family:inherit}
+.main{max-width:1200px;margin:0 auto;padding:12px 24px 60px}
+.stats-row{display:flex;gap:10px;margin-bottom:24px;overflow-x:auto}
+.stat-card{flex:1;min-width:120px;background:#fff;border-radius:12px;padding:16px;box-shadow:var(--sh);border:1px solid var(--bd);text-align:center}
+.stat-num{font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--p),var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-label{font-size:12px;color:var(--tm);margin-top:2px}
+.section{margin-bottom:24px}
+.section-card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.section-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.section-icon.tj{background:linear-gradient(135deg,#FFE0CC,#FFCBA4)}
+.section-icon.tl{background:linear-gradient(135deg,#D0E8FF,#A8D4FF)}
+.section-icon.wk{background:linear-gradient(135deg,#E8D5F5,#D4B8EA)}
+.section-title{font-size:17px;font-weight:700}
+.section-title small{font-size:11px;font-weight:400;color:var(--tm);margin-left:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}
+@media(min-width:768px){.grid{grid-template-columns:repeat(6,1fr)}}
+.grid-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 10px;border-radius:12px;cursor:pointer;transition:.3s;position:relative}
+.grid-item:hover{background:var(--sec);transform:translateY(-3px);box-shadow:0 6px 20px rgba(255,107,53,.12)}
+.item-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;transition:.3s}
+.grid-item:hover .item-icon{transform:scale(1.1)}
+.item-icon.or{background:linear-gradient(135deg,#FFF0E5,#FFE0CC)}
+.item-icon.bl{background:linear-gradient(135deg,#E8F2FF,#D0E4FF)}
+.item-icon.gn{background:linear-gradient(135deg,#E5F8ED,#C8F0D8)}
+.item-icon.pp{background:linear-gradient(135deg,#F0E8F8,#E0D0F0)}
+.item-icon.pk{background:linear-gradient(135deg,#FFE8EE,#FFD0DD)}
+.item-icon.yw{background:linear-gradient(135deg,#FFF8E0,#FFF0C0)}
+.item-icon.tl2{background:linear-gradient(135deg,#E0F5F0,#C0EBE0)}
+.item-icon.rd{background:linear-gradient(135deg,#FFE5E5,#FFD0D0)}
+.item-label{font-size:12px;font-weight:500;text-align:center}
+.badge{position:absolute;top:4px;right:4px;font-size:10px;padding:1px 5px;border-radius:6px;font-weight:700;color:#fff}
+.badge.hot{background:linear-gradient(135deg,#FF4B4B,#FF6B6B)}
+.badge.new{background:linear-gradient(135deg,#4CAF50,#66BB6A)}
+.panel-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:200}
+.panel-overlay.show{display:block}
+.panel{position:fixed;top:0;right:-100%;width:min(90vw,700px);height:100vh;background:#fff;z-index:201;transition:right .35s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-4px 0 30px rgba(0,0,0,.1)}
+.panel.show{right:0}
+.panel-head{position:sticky;top:0;background:#fff;padding:20px 24px 12px;border-bottom:1px solid var(--bd);z-index:2;display:flex;justify-content:space-between;align-items:center}
+.panel-title{font-size:20px;font-weight:700}
+.panel-close{width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f5;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.panel-close:hover{background:#eee}
+.panel-body{padding:20px 24px 40px}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:#f8f4f0;padding:10px 8px;text-align:left;font-weight:600;position:sticky;top:0;cursor:pointer;white-space:nowrap;border-bottom:2px solid var(--bd)}
+.data-table td{padding:8px;border-bottom:1px solid #f0f0f0;white-space:nowrap}
+.data-table tr:hover td{background:#fef8f4}
+.type-badge{display:inline-block;padding:2px 8px;border-radius:10px;color:#fff;font-size:11px;font-weight:600}
+.rarity-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;color:#fff}
+.stat-bar{display:inline-block;height:8px;border-radius:4px;min-width:4px;vertical-align:middle;margin-left:4px}
+.matchup-wrap{overflow-x:auto}
+.matchup-table{border-collapse:collapse;font-size:12px;min-width:600px}
+.matchup-table th,.matchup-table td{width:42px;min-width:42px;height:36px;text-align:center;border:1px solid #eee;font-weight:600}
+.matchup-table th{background:#f8f4f0;position:sticky;top:0;z-index:1}
+.matchup-table .rh{position:sticky;left:0;background:#f8f4f0;z-index:2}
+.ms{background:#4CAF50;color:#fff}.mw{background:#e57373;color:#fff}.mi{background:#424242;color:#fff}
+.filter-bar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-bar select,.filter-bar input{padding:7px 10px;border:1px solid var(--bd);border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.filter-bar input{flex:1;min-width:120px}
+.filter-bar select:focus,.filter-bar input:focus{outline:none;border-color:var(--p)}
+.calc-input{width:65px;padding:6px;border:1px solid var(--bd);border-radius:8px;font-size:13px;text-align:center;font-family:inherit}
+.calc-input:focus{outline:none;border-color:var(--p)}
+.calc-result{font-weight:700;color:var(--p);min-width:45px;text-align:center;font-size:15px}
+.calc-bar{flex:1;height:10px;background:#f0f0f0;border-radius:5px;min-width:50px;overflow:hidden}
+.calc-bar-fill{height:100%;border-radius:5px;transition:width .4s}
+.calc-select{padding:8px 12px;border:1px solid var(--bd);border-radius:8px;font-size:13px;font-family:inherit;background:#fff}
+.nature-table{width:100%;border-collapse:collapse;font-size:13px}
+.nature-table th{background:#f8f4f0;padding:10px 12px;text-align:center;font-weight:600;border-bottom:2px solid var(--bd)}
+.nature-table td{padding:8px 12px;text-align:center;border-bottom:1px solid #f0f0f0}
+.nature-table tr:hover td{background:#fef8f4}
+.plus{color:#4CAF50;font-weight:700}.minus{color:#e57373;font-weight:700}
+.footer{text-align:center;padding:28px 24px 44px;color:var(--tm);font-size:12px;line-height:1.8}
+@media(max-width:480px){.hero h1{font-size:26px}.main{padding:10px 14px 48px}.section-card{padding:14px}.grid{grid-template-columns:repeat(3,1fr);gap:6px}.item-icon{width:40px;height:40px;font-size:20px}.panel{width:100vw}}
+</style>
 </head>
 <body>
-
-<!-- ===== Hero ===== -->
-<header class="hero">
-    <div class="float-star"></div>
-    <div class="float-star"></div>
-    <div class="float-star"></div>
-    <div class="float-star"></div>
-    <div class="hero-inner">
-        <div class="hero-badge">⚡ 洛克王国：世界 · 攻略百科</div>
-        <h1>
-            🏰 洛克广场
-            <span>Wiki 攻略站 · 精灵图鉴 · 数据工具</span>
-        </h1>
-    </div>
-</header>
-
-<!-- ===== Navigation ===== -->
-<nav class="nav-wrap">
-    <div class="nav-inner">
-        <div class="nav-tab active" data-target="all">🏠 全部</div>
-        <div class="nav-tab" data-target="tujian">📖 图鉴</div>
-        <div class="nav-tab" data-target="tools">🔧 工具</div>
-        <div class="nav-tab" data-target="wiki">📚 百科</div>
-    </div>
-</nav>
-
-<!-- ===== Search ===== -->
-<div class="search-wrap">
-    <div class="search-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="searchInput" placeholder="搜索精灵、技能、道具…" />
-        <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
-    </div>
-</div>
-
-<!-- ===== Main ===== -->
+<header class="hero"><div class="hero-inner">
+<div class="hero-badge">⚡ 洛克王国：世界 · 攻略百科</div>
+<h1>🏰 洛克广场<span>Wiki 攻略站 · 精灵图鉴 · 数据工具</span></h1>
+</div></header>
+<nav class="nav-wrap"><div class="nav-inner">
+<div class="nav-tab active" data-t="all">🏠 全部</div>
+<div class="nav-tab" data-t="tj">📖 图鉴</div>
+<div class="nav-tab" data-t="tl">🔧 工具</div>
+<div class="nav-tab" data-t="wk">📚 百科</div>
+</div></nav>
+<div class="search-wrap"><div class="search-box"><span>🔍</span><input type="text" id="searchInput" placeholder="搜索精灵、技能、道具…"></div></div>
 <main class="main">
-
-    <!-- Quick Stats -->
-    <div class="quick-stats reveal">
-        <div class="stat-card">
-            <div class="stat-num" id="countPets">800+</div>
-            <div class="stat-label">精灵收录</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num">500+</div>
-            <div class="stat-label">技能数据</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num">300+</div>
-            <div class="stat-label">道具信息</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num">21</div>
-            <div class="stat-label">属性系别</div>
-        </div>
-    </div>
-
-    <!-- 图鉴 Section -->
-    <section class="section reveal" data-section="tujian">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-icon tujian">📖</div>
-                <div class="section-title">图鉴 <small>Pokédex</small></div>
-            </div>
-            <div class="grid">
-                <div class="grid-item" onclick="openModal('精灵图鉴', '查看全部精灵信息，包含属性、种族值、技能、进化链、获取方式等完整资料。支持多维度筛选排序。')">
-                    <span class="badge-hot">热</span>
-                    <div class="item-icon orange">🐾</div>
-                    <div class="item-label">精灵</div>
-                </div>
-                <div class="grid-item" onclick="openModal('技能图鉴', '收录全部精灵技能，含伤害值、命中率、PP值、技能效果、学习方式等详细数据。')">
-                    <div class="item-icon blue">⚔️</div>
-                    <div class="item-label">技能</div>
-                </div>
-                <div class="grid-item" onclick="openModal('道具图鉴', '查看游戏中所有道具，包含装备、消耗品、材料、关键道具等分类信息与获取途径。')">
-                    <div class="item-icon green">🎒</div>
-                    <div class="item-label">道具</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 工具 Section -->
-    <section class="section reveal" data-section="tools">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-icon tools">🔧</div>
-                <div class="section-title">工具 <small>Tools</small></div>
-            </div>
-            <div class="grid">
-                <div class="grid-item" onclick="openModal('孵蛋查询', '输入父方和母方精灵，快速查询可能孵化出的精灵及遗传技能，优化孵蛋方案。')">
-                    <div class="item-icon pink">🥚</div>
-                    <div class="item-label">孵蛋查询</div>
-                </div>
-                <div class="grid-item" onclick="openModal('地图工具', '洛克王国全地图导览，查看各区域精灵分布、NPC位置、隐藏彩蛋等信息。')">
-                    <div class="item-icon teal">🗺️</div>
-                    <div class="item-label">地图工具</div>
-                </div>
-                <div class="grid-item" onclick="openModal('阵容分享', '浏览和分享精灵对战阵容搭配，查看热门阵容、克制关系、战术思路。')">
-                    <span class="badge-new">新</span>
-                    <div class="item-icon purple">👥</div>
-                    <div class="item-label">阵容分享</div>
-                </div>
-                <div class="grid-item" onclick="openModal('培养分享', '分享精灵培养方案，包含性格、努力值分配、技能搭配、装备推荐等。')">
-                    <div class="item-icon yellow">📝</div>
-                    <div class="item-label">培养分享</div>
-                </div>
-                <div class="grid-item" onclick="openModal('最爱精灵', '收藏你最爱的精灵，快速查看它们的详细资料和培养建议。')">
-                    <div class="item-icon red">❤️</div>
-                    <div class="item-label">最爱精灵</div>
-                </div>
-                <div class="grid-item" onclick="openModal('能力计算', '精灵能力值计算器，输入种族值、性格、努力值等参数，精确计算最终能力值。')">
-                    <span class="badge-hot">热</span>
-                    <div class="item-icon blue">🧮</div>
-                    <div class="item-label">能力计算</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 百科 Section -->
-    <section class="section reveal" data-section="wiki">
-        <div class="section-card">
-            <div class="section-header">
-                <div class="section-icon wiki">📚</div>
-                <div class="section-title">百科 <small>Wiki</small></div>
-            </div>
-            <div class="grid">
-                <div class="grid-item" onclick="openModal('精灵特性', '了解所有精灵特性效果，包含触发条件、战斗影响、特性搭配推荐等。')">
-                    <div class="item-icon orange">⭐</div>
-                    <div class="item-label">精灵特性</div>
-                </div>
-                <div class="grid-item" onclick="openModal('精灵分类', '精灵按属性、稀有度、获取方式等多维度分类，快速找到你想要的精灵。')">
-                    <div class="item-icon blue">📂</div>
-                    <div class="item-label">精灵分类</div>
-                </div>
-                <div class="grid-item" onclick="openModal('技能名词', '详解技能相关术语，如先制、反射、吸取、天气效果等核心战斗机制。')">
-                    <div class="item-icon purple">💬</div>
-                    <div class="item-label">技能名词</div>
-                </div>
-                <div class="grid-item" onclick="openModal('属性克制', '21种属性的完整克制关系表，包含双属性组合、伤害倍率计算等。')">
-                    <span class="badge-hot">热</span>
-                    <div class="item-icon green">🔄</div>
-                    <div class="item-label">属性克制</div>
-                </div>
-                <div class="grid-item" onclick="openModal('性格修正', '全部性格对能力值的加成/减成效果一览，帮助选择最优性格。')">
-                    <div class="item-icon yellow">😊</div>
-                    <div class="item-label">性格修正</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<!-- ===== Modal ===== -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-    <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-desc" id="modalDesc"></div>
-        <button class="modal-close" onclick="closeModal()">知道了</button>
-    </div>
+<div class="stats-row">
+<div class="stat-card"><div class="stat-num">800+</div><div class="stat-label">精灵收录</div></div>
+<div class="stat-card"><div class="stat-num">500+</div><div class="stat-label">技能数据</div></div>
+<div class="stat-card"><div class="stat-num">300+</div><div class="stat-label">道具信息</div></div>
+<div class="stat-card"><div class="stat-num">21</div><div class="stat-label">属性系别</div></div>
 </div>
-
-<!-- ===== Footer ===== -->
+<section class="section" data-s="tj"><div class="section-card">
+<div class="section-header"><div class="section-icon tj">📖</div><div class="section-title">图鉴 <small>Pokédex</small></div></div>
+<div class="grid">
+<div class="grid-item" onclick="openPanel('spirits')"><span class="badge hot">热</span><div class="item-icon or">🐾</div><div class="item-label">精灵</div></div>
+<div class="grid-item" onclick="openPanel('skills')"><div class="item-icon bl">⚔️</div><div class="item-label">技能</div></div>
+<div class="grid-item" onclick="openPanel('items')"><div class="item-icon gn">🎒</div><div class="item-label">道具</div></div>
+</div></div></section>
+<section class="section" data-s="tl"><div class="section-card">
+<div class="section-header"><div class="section-icon tl">🔧</div><div class="section-title">工具 <small>Tools</small></div></div>
+<div class="grid">
+<div class="grid-item" onclick="openPanel('egg')"><div class="item-icon pk">🥚</div><div class="item-label">孵蛋查询</div></div>
+<div class="grid-item" onclick="openPanel('map')"><div class="item-icon tl2">🗺️</div><div class="item-label">地图工具</div></div>
+<div class="grid-item" onclick="openPanel('team')"><span class="badge new">新</span><div class="item-icon pp">👥</div><div class="item-label">阵容分享</div></div>
+<div class="grid-item" onclick="openPanel('train')"><div class="item-icon yw">📝</div><div class="item-label">培养分享</div></div>
+<div class="grid-item" onclick="openPanel('fav')"><div class="item-icon rd">❤️</div><div class="item-label">最爱精灵</div></div>
+<div class="grid-item" onclick="openPanel('calc')"><span class="badge hot">热</span><div class="item-icon bl">🧮</div><div class="item-label">能力计算</div></div>
+</div></div></section>
+<section class="section" data-s="wk"><div class="section-card">
+<div class="section-header"><div class="section-icon wk">📚</div><div class="section-title">百科 <small>Wiki</small></div></div>
+<div class="grid">
+<div class="grid-item" onclick="openPanel('ability')"><div class="item-icon or">⭐</div><div class="item-label">精灵特性</div></div>
+<div class="grid-item" onclick="openPanel('classify')"><div class="item-icon bl">📂</div><div class="item-label">精灵分类</div></div>
+<div class="grid-item" onclick="openPanel('terms')"><div class="item-icon pp">💬</div><div class="item-label">技能名词</div></div>
+<div class="grid-item" onclick="openPanel('matchup')"><span class="badge hot">热</span><div class="item-icon gn">🔄</div><div class="item-label">属性克制</div></div>
+<div class="grid-item" onclick="openPanel('nature')"><div class="item-icon yw">😊</div><div class="item-label">性格修正</div></div>
+</div></div></section>
+</main>
+<div class="panel-overlay" id="overlay" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+<div class="panel-head"><div class="panel-title" id="panelTitle"></div><button class="panel-close" onclick="closePanel()">✕</button></div>
+<div class="panel-body" id="panelBody"></div>
+</div>
 <footer class="footer">
-    <p>🏰 洛克广场 · 洛克王国：世界 Wiki攻略站</p>
-    <p>数据仅供参考，以游戏内实际为准</p>
-    <p style="margin-top: 8px;">Made with ❤️ for 洛克王国玩家</p>
+<p>🏰 洛克广场 · 洛克王国：世界 Wiki攻略站</p>
+<p>数据来源于B站Wiki · 仅供参考</p>
 </footer>
-
-<script>
-    // ===== Navigation Tabs =====
-    const tabs = document.querySelectorAll('.nav-tab');
-    const sections = document.querySelectorAll('.section');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            const target = tab.dataset.target;
-
-            sections.forEach(s => {
-                if (target === 'all' || s.dataset.section === target) {
-                    s.style.display = '';
-                } else {
-                    s.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // ===== Search =====
-    const searchInput = document.getElementById('searchInput');
-    const searchClear = document.getElementById('searchClear');
-
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.trim().toLowerCase();
-        searchClear.classList.toggle('show', query.length > 0);
-
-        document.querySelectorAll('.grid-item').forEach(item => {
-            const label = item.querySelector('.item-label').textContent.toLowerCase();
-            if (!query || label.includes(query)) {
-                item.style.display = '';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
-        // Show all sections when searching
-        if (query) {
-            tabs.forEach(t => t.classList.remove('active'));
-            tabs[0].classList.add('active');
-            sections.forEach(s => s.style.display = '');
-        }
-    });
-
-    function clearSearch() {
-        searchInput.value = '';
-        searchClear.classList.remove('show');
-        document.querySelectorAll('.grid-item').forEach(item => item.style.display = '');
-    }
-
-    // ===== Modal =====
-    function openModal(title, desc) {
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalDesc').textContent = desc;
-        document.getElementById('modalOverlay').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(e) {
-        if (e && e.target !== document.getElementById('modalOverlay') && e.type === 'click') return;
-        document.getElementById('modalOverlay').classList.remove('show');
-        document.body.style.overflow = '';
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
-
-    // ===== Scroll Reveal =====
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // ===== Animated Counter =====
-    function animateCounter(el, target, suffix = '') {
-        let current = 0;
-        const step = Math.max(1, Math.floor(target / 40));
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                current = target;
-                clearInterval(timer);
-            }
-            el.textContent = current + suffix;
-        }, 30);
-    }
-
-    // Trigger counters when visible
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const nums = entry.target.querySelectorAll('.stat-num');
-                nums.forEach(num => {
-                    const text = num.textContent;
-                    const match = text.match(/(\d+)/);
-                    if (match) {
-                        const val = parseInt(match[1]);
-                        const suffix = text.replace(match[1], '');
-                        animateCounter(num, val, suffix);
-                    }
-                });
-                statsObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.quick-stats').forEach(el => statsObserver.observe(el));
-</script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
